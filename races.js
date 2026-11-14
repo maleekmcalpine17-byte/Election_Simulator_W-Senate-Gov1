@@ -1,31 +1,20 @@
-// Down-ballot race data: every Senate class and every gubernatorial election year.
-// Verified/updated: the 2026 races are as of October 16, 2026 (Wikipedia, "2026 United States Senate elections" and
-// "2026 United States gubernatorial elections"; Cook Political Report ratings as listed there: Senate Sep 23, 2026,
-// Governor Sep 10, 2026). The other classes are scaffolding built from who holds each seat today: there are no
-// nominees yet and no Cook ratings, so the sitting officeholder is entered in the holding party's slot (as the
-// incumbent), the other side is a generic nominee, and the race starts at 2 x state PVI + incumbency + the
-// incumbent president's approval effect. Rename candidates, untick Incumbent for open seats, and change the party
-// holding the seat in the game itself.
+// 2026 down-ballot race data, as of October 16, 2026.
+// Sources: Wikipedia, "2026 United States Senate elections" and "2026 United States gubernatorial elections"
+// (nominees, incumbents, seat holders); Cook Political Report ratings as listed there (Senate: Sep 23, 2026;
+// Governor: Sep 10, 2026). Update this file as the race changes (withdrawals, replacements, new ratings).
 //
-// Each class: { label, year, note, notUp: {D, R}, races: [ ...rows ] }
-// Each row: [state, party that holds the seat, Cook rating ("Not rated" if none), Republican candidate,
-//            R is incumbent (1/0), Democratic-side candidate, D-side is incumbent (1/0),
-//            D-side party ("D" or "I"), special election (1/0)]
-// Where an independent is the main challenger to the Republican (Idaho, Montana, Nebraska, South Dakota in 2026) the
-// independent fills the Democratic-side slot and is counted with the Democrats in the Senate tally. The same goes for
-// the two sitting independents (Angus King, Bernie Sanders), who caucus with the Democrats.
-// Two 2026 governor races list a placeholder because the nominee isn't a single person yet: Alaska (three Republicans
-// advanced under ranked-choice voting) and Rhode Island (Republican primary result not in the source).
+// Each row: [state, party that holds the seat, Cook rating, Republican candidate, R is incumbent (1/0),
+//            Democratic-side candidate, D-side is incumbent (1/0), D-side party ("D" or "I"), special election (1/0)]
+// Where an independent is the main challenger to the Republican (Idaho, Montana, Nebraska, South Dakota) the
+// independent fills the Democratic-side slot and is counted with the Democrats in the Senate tally.
+// Two races list a placeholder because the nominee isn't a single person yet: Alaska governor (three Republicans
+// advanced under ranked-choice voting) and Rhode Island governor (Republican primary result not in the source).
 const RACES = {
   senate: {
-    defaultClass: "2026",
-    classes: {
-      "2026": {
-        label: "2026 (Class 2)", year: 2026,
-        note: "Real 2026 races: 33 regular seats plus the Florida and Ohio specials, with the current nominees and Cook ratings.",
-        // seats NOT up: Democratic caucus (32 D + 2 independents) and Republicans
-        notUp: { D: 34, R: 31 },
-        races: [
+    year: 2026,
+    // seats NOT up for election: Democratic caucus (32 D + 2 independents) and Republicans
+    notUp: { D: 34, R: 31 },
+    races: [
     ["Alabama", "R", "Solid R", "Barry Moore", 0, "Everett Wess", 0, "D", 0],
     ["Alaska", "R", "Tossup", "Dan Sullivan", 1, "Mary Peltola", 0, "D", 0],
     ["Arkansas", "R", "Solid R", "Tom Cotton", 1, "Hallie Shoffner", 0, "D", 0],
@@ -61,100 +50,13 @@ const RACES = {
     ["Virginia", "D", "Solid D", "Bert Mizusawa", 0, "Mark Warner", 1, "D", 0],
     ["West Virginia", "R", "Solid R", "Shelley Moore Capito", 1, "Rachel Fetty Anderson", 0, "D", 0],
     ["Wyoming", "R", "Solid R", "Harriet Hageman", 0, "James W. Byrd", 0, "D", 0],
-        ],
-      },
-      "2028": {
-        label: "2028 (Class 3)", year: 2028,
-        note: "Class 3 seats, elected in 2022 (the Florida and Ohio seats are on the ballot again after their 2026 specials). Nominees aren't set: the sitting senator is entered as the incumbent unless you change it. No Cook ratings.",
-        notUp: { D: 32, R: 34 },
-        races: [
-    ["Alabama", "R", "Not rated", "Katie Britt", 1, "Democratic nominee", 0, "D", 0],
-    ["Alaska", "R", "Not rated", "Lisa Murkowski", 1, "Democratic nominee", 0, "D", 0],
-    ["Arizona", "D", "Not rated", "Republican nominee", 0, "Mark Kelly", 1, "D", 0],
-    ["Arkansas", "R", "Not rated", "John Boozman", 1, "Democratic nominee", 0, "D", 0],
-    ["California", "D", "Not rated", "Republican nominee", 0, "Alex Padilla", 1, "D", 0],
-    ["Colorado", "D", "Not rated", "Republican nominee", 0, "Michael Bennet", 1, "D", 0],
-    ["Connecticut", "D", "Not rated", "Republican nominee", 0, "Richard Blumenthal", 1, "D", 0],
-    ["Florida", "R", "Not rated", "Ashley Moody", 1, "Democratic nominee", 0, "D", 0],
-    ["Georgia", "D", "Not rated", "Republican nominee", 0, "Raphael Warnock", 1, "D", 0],
-    ["Hawaii", "D", "Not rated", "Republican nominee", 0, "Brian Schatz", 1, "D", 0],
-    ["Idaho", "R", "Not rated", "Mike Crapo", 1, "Democratic nominee", 0, "D", 0],
-    ["Illinois", "D", "Not rated", "Republican nominee", 0, "Tammy Duckworth", 1, "D", 0],
-    ["Indiana", "R", "Not rated", "Todd Young", 1, "Democratic nominee", 0, "D", 0],
-    ["Iowa", "R", "Not rated", "Chuck Grassley", 1, "Democratic nominee", 0, "D", 0],
-    ["Kansas", "R", "Not rated", "Jerry Moran", 1, "Democratic nominee", 0, "D", 0],
-    ["Kentucky", "R", "Not rated", "Rand Paul", 1, "Democratic nominee", 0, "D", 0],
-    ["Louisiana", "R", "Not rated", "John Kennedy", 1, "Democratic nominee", 0, "D", 0],
-    ["Maryland", "D", "Not rated", "Republican nominee", 0, "Chris Van Hollen", 1, "D", 0],
-    ["Missouri", "R", "Not rated", "Eric Schmitt", 1, "Democratic nominee", 0, "D", 0],
-    ["Nevada", "D", "Not rated", "Republican nominee", 0, "Catherine Cortez Masto", 1, "D", 0],
-    ["New Hampshire", "D", "Not rated", "Republican nominee", 0, "Maggie Hassan", 1, "D", 0],
-    ["New York", "D", "Not rated", "Republican nominee", 0, "Chuck Schumer", 1, "D", 0],
-    ["North Carolina", "R", "Not rated", "Ted Budd", 1, "Democratic nominee", 0, "D", 0],
-    ["North Dakota", "R", "Not rated", "John Hoeven", 1, "Democratic nominee", 0, "D", 0],
-    ["Ohio", "R", "Not rated", "Jon Husted", 1, "Democratic nominee", 0, "D", 0],
-    ["Oklahoma", "R", "Not rated", "James Lankford", 1, "Democratic nominee", 0, "D", 0],
-    ["Oregon", "D", "Not rated", "Republican nominee", 0, "Ron Wyden", 1, "D", 0],
-    ["Pennsylvania", "D", "Not rated", "Republican nominee", 0, "John Fetterman", 1, "D", 0],
-    ["South Carolina", "R", "Not rated", "Tim Scott", 1, "Democratic nominee", 0, "D", 0],
-    ["South Dakota", "R", "Not rated", "John Thune", 1, "Democratic nominee", 0, "D", 0],
-    ["Utah", "R", "Not rated", "Mike Lee", 1, "Democratic nominee", 0, "D", 0],
-    ["Vermont", "D", "Not rated", "Republican nominee", 0, "Peter Welch", 1, "D", 0],
-    ["Washington", "D", "Not rated", "Republican nominee", 0, "Patty Murray", 1, "D", 0],
-    ["Wisconsin", "R", "Not rated", "Ron Johnson", 1, "Democratic nominee", 0, "D", 0],
-        ],
-      },
-      "2030": {
-        label: "2030 (Class 1)", year: 2030,
-        note: "Class 1 seats, elected in 2024. Nominees aren't set: the sitting senator is entered as the incumbent unless you change it (Klobuchar and Blackburn are running for governor in 2026, which would open their seats). No Cook ratings.",
-        notUp: { D: 28, R: 39 },
-        races: [
-    ["Arizona", "D", "Not rated", "Republican nominee", 0, "Ruben Gallego", 1, "D", 0],
-    ["California", "D", "Not rated", "Republican nominee", 0, "Adam Schiff", 1, "D", 0],
-    ["Connecticut", "D", "Not rated", "Republican nominee", 0, "Chris Murphy", 1, "D", 0],
-    ["Delaware", "D", "Not rated", "Republican nominee", 0, "Lisa Blunt Rochester", 1, "D", 0],
-    ["Florida", "R", "Not rated", "Rick Scott", 1, "Democratic nominee", 0, "D", 0],
-    ["Hawaii", "D", "Not rated", "Republican nominee", 0, "Mazie Hirono", 1, "D", 0],
-    ["Indiana", "R", "Not rated", "Jim Banks", 1, "Democratic nominee", 0, "D", 0],
-    ["Maine", "D", "Not rated", "Republican nominee", 0, "Angus King", 1, "I", 0],
-    ["Maryland", "D", "Not rated", "Republican nominee", 0, "Angela Alsobrooks", 1, "D", 0],
-    ["Massachusetts", "D", "Not rated", "Republican nominee", 0, "Elizabeth Warren", 1, "D", 0],
-    ["Michigan", "D", "Not rated", "Republican nominee", 0, "Elissa Slotkin", 1, "D", 0],
-    ["Minnesota", "D", "Not rated", "Republican nominee", 0, "Amy Klobuchar", 1, "D", 0],
-    ["Mississippi", "R", "Not rated", "Roger Wicker", 1, "Democratic nominee", 0, "D", 0],
-    ["Missouri", "R", "Not rated", "Josh Hawley", 1, "Democratic nominee", 0, "D", 0],
-    ["Montana", "R", "Not rated", "Tim Sheehy", 1, "Democratic nominee", 0, "D", 0],
-    ["Nebraska", "R", "Not rated", "Deb Fischer", 1, "Democratic nominee", 0, "D", 0],
-    ["Nevada", "D", "Not rated", "Republican nominee", 0, "Jacky Rosen", 1, "D", 0],
-    ["New Jersey", "D", "Not rated", "Republican nominee", 0, "Andy Kim", 1, "D", 0],
-    ["New Mexico", "D", "Not rated", "Republican nominee", 0, "Martin Heinrich", 1, "D", 0],
-    ["New York", "D", "Not rated", "Republican nominee", 0, "Kirsten Gillibrand", 1, "D", 0],
-    ["North Dakota", "R", "Not rated", "Kevin Cramer", 1, "Democratic nominee", 0, "D", 0],
-    ["Ohio", "R", "Not rated", "Bernie Moreno", 1, "Democratic nominee", 0, "D", 0],
-    ["Pennsylvania", "R", "Not rated", "Dave McCormick", 1, "Democratic nominee", 0, "D", 0],
-    ["Rhode Island", "D", "Not rated", "Republican nominee", 0, "Sheldon Whitehouse", 1, "D", 0],
-    ["Tennessee", "R", "Not rated", "Marsha Blackburn", 1, "Democratic nominee", 0, "D", 0],
-    ["Texas", "R", "Not rated", "Ted Cruz", 1, "Democratic nominee", 0, "D", 0],
-    ["Utah", "R", "Not rated", "John Curtis", 1, "Democratic nominee", 0, "D", 0],
-    ["Vermont", "D", "Not rated", "Republican nominee", 0, "Bernie Sanders", 1, "I", 0],
-    ["Virginia", "D", "Not rated", "Republican nominee", 0, "Tim Kaine", 1, "D", 0],
-    ["Washington", "D", "Not rated", "Republican nominee", 0, "Maria Cantwell", 1, "D", 0],
-    ["West Virginia", "R", "Not rated", "Jim Justice", 1, "Democratic nominee", 0, "D", 0],
-    ["Wisconsin", "D", "Not rated", "Republican nominee", 0, "Tammy Baldwin", 1, "D", 0],
-    ["Wyoming", "R", "Not rated", "John Barrasso", 1, "Democratic nominee", 0, "D", 0],
-        ],
-      },
-    },
+  ],
   },
   governor: {
-    defaultClass: "2026",
-    classes: {
-      "2026": {
-        label: "2026", year: 2026,
-        note: "Real 2026 races: 36 governorships (including New Hampshire and Vermont, which have two-year terms), with the current nominees and Cook ratings.",
-        // governors NOT up in 2026 (14 states): 6 Democrats, 8 Republicans
-        notUp: { D: 6, R: 8 },
-        races: [
+    year: 2026,
+    // governors NOT up for election in 2026 (14 states): 6 Democrats, 8 Republicans
+    notUp: { D: 6, R: 8 },
+    races: [
     ["Alabama", "R", "Solid R", "Tommy Tuberville", 0, "Doug Jones", 0, "D", 0],
     ["Alaska", "R", "Lean R", "Republican field (Bronson, Taylor, Wilson)", 0, "Jonathan Kreiss-Tomkins", 0, "D", 0],
     ["Arizona", "D", "Lean D", "Andy Biggs", 0, "Katie Hobbs", 1, "D", 0],
@@ -191,89 +93,7 @@ const RACES = {
     ["Vermont", "R", "Solid R", "Phil Scott", 1, "Amanda Janoo", 0, "D", 0],
     ["Wisconsin", "D", "Tossup", "Tom Tiffany", 0, "David Crowley", 0, "D", 0],
     ["Wyoming", "R", "Solid R", "Eric Barlow", 0, "Kenneth Casner", 0, "D", 0],
-        ],
-      },
-      "2027": {
-        label: "2027 (off-year: KY, LA, MS)", year: 2027,
-        note: "Off-year class: the three governorships elected in 2027. Nominees aren't set and there are no Cook ratings. Kentucky's and Mississippi's governors are term-limited, so those are open seats; Louisiana's Jeff Landry is entered as the incumbent.",
-        notUp: { D: 23, R: 24 },
-        races: [
-    ["Kentucky", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Louisiana", "R", "Not rated", "Jeff Landry", 1, "Democratic nominee", 0, "D", 0],
-    ["Mississippi", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-        ],
-      },
-      "2028": {
-        label: "2028 (incl. NH and VT)", year: 2028,
-        note: "Nine four-year governorships plus New Hampshire and Vermont (two-year terms). The sitting governor is entered as the incumbent unless term-limited (Montana); change it if they won't run.",
-        notUp: { D: 21, R: 18 },
-        races: [
-    ["Delaware", "D", "Not rated", "Republican nominee", 0, "Matt Meyer", 1, "D", 0],
-    ["Indiana", "R", "Not rated", "Mike Braun", 1, "Democratic nominee", 0, "D", 0],
-    ["Missouri", "R", "Not rated", "Mike Kehoe", 1, "Democratic nominee", 0, "D", 0],
-    ["Montana", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["New Hampshire", "R", "Not rated", "Kelly Ayotte", 1, "Democratic nominee", 0, "D", 0],
-    ["North Carolina", "D", "Not rated", "Republican nominee", 0, "Josh Stein", 1, "D", 0],
-    ["North Dakota", "R", "Not rated", "Kelly Armstrong", 1, "Democratic nominee", 0, "D", 0],
-    ["Utah", "R", "Not rated", "Spencer Cox", 1, "Democratic nominee", 0, "D", 0],
-    ["Vermont", "R", "Not rated", "Phil Scott", 1, "Democratic nominee", 0, "D", 0],
-    ["Washington", "D", "Not rated", "Republican nominee", 0, "Bob Ferguson", 1, "D", 0],
-    ["West Virginia", "R", "Not rated", "Patrick Morrisey", 1, "Democratic nominee", 0, "D", 0],
-        ],
-      },
-      "2029": {
-        label: "2029 (off-year: NJ, VA)", year: 2029,
-        note: "Off-year class: New Jersey and Virginia, elected in 2025. Nominees aren't set and there are no Cook ratings. Virginia's governor can't succeed themselves (open seat); New Jersey's Mikie Sherrill is entered as the incumbent.",
-        notUp: { D: 22, R: 26 },
-        races: [
-    ["New Jersey", "D", "Not rated", "Republican nominee", 0, "Mikie Sherrill", 1, "D", 0],
-    ["Virginia", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-        ],
-      },
-      "2030": {
-        label: "2030 (incl. NH and VT)", year: 2030,
-        note: "The same 36 states as 2026, including New Hampshire and Vermont. Who holds each office in 2030 depends on the 2026 results, so every race starts with the party that holds it today and no incumbent; set both in the game. No Cook ratings.",
-        notUp: { D: 6, R: 8 },
-        races: [
-    ["Alabama", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Alaska", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Arizona", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Arkansas", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["California", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Colorado", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Connecticut", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Florida", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Georgia", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Hawaii", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Idaho", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Illinois", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Iowa", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Kansas", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Maine", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Maryland", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Massachusetts", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Michigan", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Minnesota", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Nebraska", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Nevada", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["New Hampshire", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["New Mexico", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["New York", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Ohio", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Oklahoma", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Oregon", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Pennsylvania", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Rhode Island", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["South Carolina", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["South Dakota", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Tennessee", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Texas", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Vermont", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Wisconsin", "D", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-    ["Wyoming", "R", "Not rated", "Republican nominee", 0, "Democratic nominee", 0, "D", 0],
-        ],
-      },
-    },
+  ],
   },
 };
 if (typeof module !== "undefined") module.exports = RACES;

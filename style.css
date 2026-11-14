@@ -134,3 +134,30 @@ h2 { margin: 36px 0 12px; font-size: 1.25rem; }
 .badge.r { background: var(--red); } .badge.b { background: var(--blue); }
 .flip { background: var(--warn-bg); color: var(--warn-tx); font-size: .72rem; font-weight: 700; border-radius: 4px; padding: 1px 5px; }
 .btn.small { padding: 4px 10px; font-size: .85rem; }
+
+/* ---------- third parties ---------- */
+#third-cards { margin-top: 16px; }
+#third-cards:empty { display: none; }
+.card.t1 { border-top-color: #8e44ad; } .card.t2 { border-top-color: #e67e22; }
+.card.t1 input[type="range"] { accent-color: #8e44ad; } .card.t2 input[type="range"] { accent-color: #e67e22; }
+.state-list li.t1, .closest-list li.t1 { border-left-color: #8e44ad; }
+.state-list li.t2, .closest-list li.t2 { border-left-color: #e67e22; }
+.state-list li.o, .closest-list li.o { border-left-color: var(--tie); }
+.shares { display: block; color: var(--muted); font-size: .8rem; }
+
+/* ---------- race simulator ---------- */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+@media (max-width: 760px) { .grid3 { grid-template-columns: 1fr; } }
+.radios { display: grid; gap: 6px; }
+.radio { display: flex !important; justify-content: flex-start !important; gap: 8px; align-items: center; font-size: .95rem; }
+.note.warn { color: var(--warn-tx); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+#tab-race .cards { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+.holder { color: var(--muted); }
+
+/* ---------- sheets ---------- */
+textarea.sheet { width: 100%; min-height: 220px; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--text); font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; overflow: auto; }
+.legend { margin-top: 10px; } .legend summary { cursor: pointer; font-weight: 600; }
+#tab-sheet ul { margin: 8px 0 0; padding-left: 20px; }
